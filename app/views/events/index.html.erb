@@ -1,0 +1,93 @@
+<!-- app/views/events/index.html.erb -->
+
+<h1>Events</h1>
+
+<div>
+  <% if clerk.session %>
+    <span>Signed in</span>
+    <%= link_to "Account", 
+                Rails.application.credentials.dig(:clerk, :user_profile_url) %>
+  <% else %>
+    <%= link_to "Sign In",
+            "#{clerk.sign_in_url}?redirect_url=#{CGI.escape(root_url)}" %>
+    <%= link_to "Sign Up",
+            "#{clerk.sign_up_url}?redirect_url=#{CGI.escape(root_url)}" %>
+  <% end %>
+</div>
+
+<hr>
+
+<% @events.each do |event| %>
+  <div style="margin-bottom: 40px;">
+    <h2><%= event.title %></h2>
+
+    <% if event.image_url.present? %>
+      <%= image_tag event.image_url,
+                    width: 300,
+                    alt: event.title %>
+    <% end %>
+
+    <% if event.description.present? %>
+      <p><%= event.description %></p>
+    <% end %>
+
+    <p>
+      <strong>Start:</strong>
+      <%= event.start_date %>
+    </p>
+
+    <% if event.end_date.present? %>
+      <p>
+        <strong>End:</strong>
+        <%= event.end_date %>
+      </p>
+    <% end %>
+
+    <% if event.venue_name.present? %>
+      <p>
+        <strong>Venue:</strong>
+        <%= event.venue_name %>
+      </p>
+    <% end %>
+
+    <% if event.city.present? %>
+      <p>
+        <strong>City:</strong>
+        <%= event.city %>
+      </p>
+    <% end %>
+
+    <p>
+      👍 <%= @vote_counts.fetch([event.id, "up"], 0) %>
+      &nbsp;
+      👎 <%= @vote_counts.fetch([event.id, "down"], 0) %>
+    </p>
+
+    <% if clerk.session %>
+      <%= button_to "Like",
+                    upvote_event_vote_path(event),
+                    method: :post,
+                    data: { turbo: false } %>
+
+      <%= button_to "Dislike",
+                    downvote_event_vote_path(event),
+                    method: :post,
+                    data: { turbo: false } %>
+    <% else %>
+      <p>
+        <%= link_to "Sign in to vote", clerk.sign_in_url %>
+      </p>
+    <% end %>
+
+    <% if event.branded_url.present? %>
+      <p>
+        <%= link_to "View Event",
+                    event.branded_url,
+                    target: "_blank",
+                    rel: "noopener" %>
+      </p>
+    <% end %>
+  </div>
+
+  <hr>
+<% end %>
