@@ -17,4 +17,5 @@ Rails.application.routes.draw do
       post :downvote
     end
   end
+  resource :session, only: :destroy
 end
