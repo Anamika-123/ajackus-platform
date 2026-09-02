@@ -7,6 +7,7 @@
     <span>Signed in</span>
     <%= link_to "Account", 
                 Rails.application.credentials.dig(:clerk, :user_profile_url) %>
+    <%= button_to "Sign Out", session_path, method: :delete %>
   <% else %>
     <%= link_to "Sign In",
             "#{clerk.sign_in_url}?redirect_url=#{CGI.escape(root_url)}" %>
@@ -33,13 +34,13 @@
 
     <p>
       <strong>Start:</strong>
-      <%= event.start_date %>
+      <%= event.start_at %>
     </p>
 
-    <% if event.end_date.present? %>
+    <% if event.end_at.present? %>
       <p>
         <strong>End:</strong>
-        <%= event.end_date %>
+        <%= event.end_at %>
       </p>
     <% end %>
 
