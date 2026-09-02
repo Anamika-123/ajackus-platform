@@ -60,6 +60,10 @@ RSpec.describe "Voting", type: :system do
 
       visit root_path
       click_button "Like"
+
+      expect(page).to have_text("Event upvoted")
+      expect(page).to have_button("Dislike")
+
       click_button "Dislike"
 
       expect(page).to have_text("Event downvoted")
