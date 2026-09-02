@@ -38,6 +38,7 @@ clerk:
   publishable_key: your_clerk_publishable_key
   sign_in_url: your_sign_in_url
   sign_up_url: your_sign_up_url
+  user_profile_url: your_user_profile_url
 
 ```
 
