@@ -17,7 +17,7 @@ module Billetto
 
       while result["has_more"] && result["next_url"].present?
         next_result = fetch_page(result["next_url"])
- 
+
         events.concat(next_result["data"])
 
         result["has_more"] = next_result["has_more"]

@@ -3,6 +3,19 @@
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
+ENV["CLERK_SKIP_RAILTIE"] = "1"
+
+class TestClerkMiddleware
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    env["clerk"] = Clerk::Proxy.new
+    @app.call(env)
+  end
+end
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -38,6 +51,8 @@ Rails.application.configure do
 
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
+
+  config.middleware.use TestClerkMiddleware
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
